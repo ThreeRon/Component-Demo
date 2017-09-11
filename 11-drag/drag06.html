@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>元素展现并自由落体运动</title>
+  <style>
+    .drag-box{position:absolute;width: 0px;height: 0px; background:url("img/ball.jpg") no-repeat;}
+  </style>
+  <script>
+
+//    使用setInterval实现元素宽高从0逐渐变大（修改元素宽高，元素left和top），
+//    当元素宽高达到边界值时，清除以上定时器，并式元素作自由落体运动；
+
+//    使用setInterval实现元素自由落体运动left和top值的修改，
+//    当top值达到边界值时，修改元素速度方向作消耗运动；
+
+      window.onload = function () {
+          var dragBox = document.getElementsByClassName('drag-box')[0];
+          var timer = 0;
+          var speedY = 0;
+
+
+          function boxChange(maxW, maxH) {
+              timer = setInterval(function () {
+                  var W = dragBox.offsetWidth + 3;
+                  var H = dragBox.offsetHeight + 3;
+                  var L =  (document.documentElement.clientWidth- W)/2;
+                  var T = (document.documentElement.clientHeight - H)/2;
+
+                  if(W > 210){
+                      W = 210;
+                      L = (document.documentElement.clientWidth- W)/2;
+                  }
+                  if(H > 210){
+                      H = 210;
+                      T = (document.documentElement.clientHeight - H)/2;
+                  }
+                  dragBox.style.width = W + 'px';
+                  dragBox.style.height = H + 'px';
+                  dragBox.style.left = L + 'px';
+                  dragBox.style.top = T + 'px';
+
+                  if(W>=maxW && H>=maxH){
+                      clearInterval(timer);
+                      drop();
+                  }
+              }, 30);
+          }
+
+          function drop() {
+              timer = setInterval(function () {
+                  speedY += 3;
+                  var T = dragBox.offsetTop + speedY;
+                  if(T > document.documentElement.clientHeight-dragBox.offsetHeight){
+                      T = document.documentElement.clientHeight-dragBox.offsetHeight;
+                      speedY *= -0.75;
+                  }
+                  dragBox.style.top = T + 'px';
+              }, 30);
+          }
+
+          boxChange(210, 210);
+      }
+  </script>
+</head>
+<body>
+<div class="drag-box"></div>
+</body>
+</html>

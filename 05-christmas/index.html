@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Title</title>
+  <link href="css/common.css" rel="stylesheet"/>
+  <link href="css/pageA.css" rel="stylesheet"/>
+  <link href="css/pageB.css" rel="stylesheet"/>
+  <link href="css/pageC.css" rel="stylesheet"/>
+  <script src="http://libs.baidu.com/jquery/1.9.1/jquery.js"></script>
+  <script type="text/javascript" src="http://img.mukewang.com/down/55ac9ea30001ace700000000.js"></script>
+  <script src="js/pageA.js"></script>
+  <script src="js/pageB.js"></script>
+  <script src="js/pageC.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/observer.js"></script>
+</head>
+<body>
+  <div class="container">
+
+    <section class="page-a bg-adaptive">
+      <figure class="moon"></figure>
+      <figure class="tree"></figure>
+      <figure class="cloudy"></figure>
+      <div class="chs-boy chs-boy-deer"></div>
+      <div class="window wood">
+        <div class="window-bg"></div>
+        <div class="window-content">
+          <div class="window-left"></div>
+          <div class="window-right"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="page-b bg-adaptive">
+      <div class="girl"></div>
+      <div class="christmas-boy-head"></div>
+      <div class="christmas-boy boy-walk"></div>
+    </section>
+
+    <section class="page-c bg-adaptive"></section>
+  </div>
+
+  <script>
+      /**
+       * 自适应页面大小
+       * @type {Element}
+       */
+      (function (doc, win) {
+          var docEl = document.documentElement;
+          var resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize';
+          var recalc = function () {
+              var clientWidth = docEl.clientWidth;
+              if(!clientWidth) return;
+              docEl.style.fontSize = 20 * (clientWidth/320) + "px";
+              document.body.style.height = clientWidth * (900/1440) + "px";
+          };
+          window.addEventListener("resizeEvt", recalc, false);
+          document.addEventListener("DOMContentLoaded",recalc, false);
+      })(document, window);
+      </script>
+</body>
+</html>

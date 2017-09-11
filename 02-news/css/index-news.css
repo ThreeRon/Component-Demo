@@ -1,0 +1,127 @@
+a:hover{
+  text-decoration: none;
+}
+img{
+  display: block;
+  width:100%;
+  border-radius: 3px;
+}
+/*navbar*/
+.navbar-brand{
+  text-indent: -9999px;
+  width: 60px;
+  background-image: url("../img/logo.png");
+  background-size: 60%;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+/*sidebar*/
+.sidebar .list-group-item{
+  border:0;
+}
+.sidebar .list-group-item.active,
+.sidebar .list-group-item.active:hover{
+  background: #ea0c3c;
+}
+/*main-content*/
+.post-list-item{
+  border-bottom:1px solid #e5e5e5;
+  padding: 20px 0;
+}
+.post-list-item:first-child{
+  padding-top: 0px;
+}
+.post-list-item:after{
+  content: '';
+  display: block;
+  clear: both;
+}
+.post-heading{
+  display: block;
+  font-size: 18px;
+  font-weight: bold;
+  color: #444;
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+.post-heading:hover{
+  color: #000;
+}
+.adater{
+  display: inline-block;
+  max-width: 15px;
+  border-radius: 50%;
+}
+/*sidebar-right*/
+.side-bar-well{
+  background: #f5f5f5;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 3px;
+}
+.side-bar-well > *{
+  padding: 10px;
+}
+.side-bar-well-title{
+  font-size: 18px;
+  font-weight:bold;
+}
+.news-item{
+  display: block;
+  color: #666;
+}
+.news-item:hover{
+  background: rgba(0,0,0,.03);
+}
+.news-info{
+  color: #999;
+  padding: 5px;
+}
+/*footer*/
+.footer{
+  margin-top: 30px;
+  padding: 30px 0;
+  text-align: center;
+  color: #999999;
+}
+/*detial*/
+.article{
+  font-size: 16px;
+}
+.article .article-title{
+  padding:20px 0 10px 0px;
+  font-size: 32px;
+  font-weight:bold;
+}
+.article .article-status{
+  color: #999999;
+}
+/*side-bar*/
+.news .info {
+  color: #999;
+  font-size: 16px;
+}
+
+.news h1 {
+  line-height: 1.5;
+}
+
+.news .content {
+  font-size: 16px;
+}
+.form-container{
+  max-width: 500px;
+  margin:0 auto;
+}
+.btn-primary {
+  background-color: #ea0c3c;
+  border-color: #ea0c3c;
+}
+.btn-primary:hover,
+.btn-primary.focus,
+.btn-primary:focus,
+.btn-primary.active, .btn-primary:active, .open>.dropdown-toggle.btn-primary,
+.btn-primary.active.focus, .btn-primary.active:focus, .btn-primary.active:hover, .btn-primary:active.focus, .btn-primary:active:focus, .btn-primary:active:hover, .open>.dropdown-toggle.btn-primary.focus, .open>.dropdown-toggle.btn-primary:focus, .open>.dropdown-toggle.btn-primary:hover {
+  background-color: #d00e38;
+  border-color: #d00e38;
+}

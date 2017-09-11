@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>slides（左右滑动-百叶窗效果）</title>
+  <style>
+    /*css reset*/
+    body,ul,li,ol{margin:0;padding:0;}
+    ul,li{list-style: none;}
+    img{border: none;vertical-align: top;}
+    /*css other*/
+    .container{width:620px;margin:0 auto;}
+    /*css slides*/
+    .slides{position:relative;width:620px;height:194px;overflow: hidden;}
+    /*css slides-box*/
+    .slides-box{width:100%;position:relative;}
+    .slides-box li{width:100%;position: absolute;left:0;top:0; }
+    .slides-box a{display: block;}
+    .slides-box img{width:100%;}
+
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="slides">
+    <ul class="slides-box">
+      <li><a href="#"><img src="./img/banner1.jpg" alt=""></a></li>
+      <li><a href="#"><img src="./img/banner2.jpg" alt=""></a></li>
+      <li><a href="#"><img src="./img/banner3.jpg" alt=""></a></li>
+      <li><a href="#"><img src="./img/banner4.jpg" alt=""></a></li>
+      <li><a href="#"><img src="./img/banner5.jpg" alt=""></a></li>
+    </ul>
+
+  </div>
+</div>
+<script src="../../widget/jquery-3.2.1.min.js"></script>
+<script>
+
+    function Slides() {
+        var slidesItems = $(".slides-box li");
+        var imgW = $(slidesItems[0]).width();
+        var imgNum = slidesItems.length;
+        var offset = 35;
+        var index = 0;
+
+        this.init = function () {
+
+            for(var i=1; i<imgNum; i++){
+                $(slidesItems[i]).css({left:imgW-(offset*imgNum)+(i*offset)});
+            }
+
+            for(var i=0; i<imgNum; i++){
+              $(slidesItems[i]).on('mouseover',function () {
+                  index = $(this).index();
+                  for(var j=0; j<imgNum; j++){
+                      $(slidesItems[j]).stop();
+                      if(j <= index){
+                          $(slidesItems[j]).animate({left:offset*j},300,'linear');
+                      }else if(j > index){
+                          $(slidesItems[j]).animate({left:imgW-(offset*imgNum)+(j*offset)},300,'linear');
+                      }
+                  }
+              });
+            }
+        }
+
+        this.scroll = function () {
+        }
+    }
+
+    var slides = new Slides();
+    slides.init();
+</script>
+</body>
+</html>

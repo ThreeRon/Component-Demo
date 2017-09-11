@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Title</title>
+  <link href="css/index.css" rel="stylesheet"/>
+  <link href="css/pageA.css" rel="stylesheet">
+  <script src="../widget/jquery-3.2.1.min.js"></script>
+  <script src="../widget/transition.js"></script>
+  <script src="js/main.js"></script>
+</head>
+<body>
+
+
+<div id="content">
+  <ul class="content-wrap ">
+    <li>
+      <div class="a-bg">
+        <div class="a-bg-top"></div>
+        <div class="a-bg-middle"></div>
+        <div class="a-bg-bottom"></div>
+      </div>
+    </li>
+    <li>page2</li>
+    <li>page3</li>
+  </ul>
+
+  <div class="charector"></div>
+</div>
+
+<button id="button1">背景图移动</button>
+<button id="button2">小男孩脚步动画</button>
+<button id="button3">小男孩停止脚步动画和移动距离</button>
+
+<script>
+
+    var container = $("#content");
+    var swipe =  new Swipe(container);
+    var $boy = $(".charector");
+
+    $('#button1').click(function () {
+        swipe.scrollTo($("#content").width()*2 , 5000);
+    });
+
+   $('#button2').click(function () {
+        $boy.addClass("slowWalk").transition({
+            'left':$("#content").width() + 'px'
+        }, 10000, 'linear');
+   });
+
+    $('#button3').click(function () {
+        var left = $boy.css('left');
+        $boy.css('left',left);
+        $boy.addClass('pauseWalk');
+    });
+
+</script>
+
+</body>
+</html>

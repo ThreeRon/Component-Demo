@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>bootstrap</title>
+  <link href="css/bootstrap.min.css" rel="stylesheet"/>
+  <script src="script"></script>
+  <style>
+    .row div{
+      outline: 1px solid goldenrod;
+      padding: 10px;
+    }
+    .row{
+      margin: 20px;
+    }
+    em{
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 13px;
+      font-style: normal;
+      margin-left: 10px;
+    }
+    div em{
+      background: gold;
+    }
+    label em{
+      background: greenyellow;
+    }
+    ul em{
+      background: lightpink;
+    }
+    .devider{
+      border:1px dashed pink;
+      margin:10px 5px;
+    }
+  </style>
+</head>
+<body>
+<h1>栅格</h1>
+<div class="row">
+  <div class="col-xs-3"><768px<em>col-xs-4</em></div>
+  <div class="col-xs-5"><768px<em>col-xs-5</em></div>
+  <div class="col-xs-4"><768px<em>col-xs-5</em></div>
+</div>
+<div class="row">
+  <div class="col-sm-3">≥768px<em>col-sm-3</em></div>
+  <div class="col-sm-5">≥768px<em>col-sm-5</em></div>
+  <div class="col-sm-4">≥768px<em>col-sm-4</em></div>
+</div>
+<div class="row">
+  <div class="col-md-3">≥992px<em>col-md-3</em></div>
+  <div class="col-md-5">≥992px<em>col-md-5</em></div>
+  <div class="col-md-4">≥992px<em>col-md-4</em></div>
+</div>
+<div class="row">
+  <div class="col-lg-3">≥1200px<em>col-lg-3</em></div>
+  <div class="col-lg-5">≥1200px<em>col-lg-5</em></div>
+  <div class="col-lg-4">≥1200px<em>col-lg-4</em></div>
+</div>
+
+<h1>表单</h1>
+<div class="container">
+  <div class="form-group">
+    <label for="myinput"><em>form-control</em></label>
+    <input type="text" class="form-control" id="myinput">
+  </div>
+
+  <div class="form-group">
+    <label for="myinput4"><em>input-group</em><em>input-group-addon</em></label>
+    <div class="input-group">
+      <span class="input-group-addon">$</span>
+      <input type="text" class="form-control" id="myinput4">
+    </div>
+  </div>
+
+  <div class="form-inline">
+    <div class="form-group">
+      <label for="myinput2"><em>form-inline</em></label>
+      <input type="text" class="form-control" id="myinput2">
+    </div>
+    <div class="form-group">
+      <label for="myinput3"><em>form-inline</em></label>
+      <input type="text" class="form-control" id="myinput3">
+    </div>
+  </div>
+</div>
+
+<h1>导航</h1>
+<div class="container">
+  <ul class="nav nav-tabs">
+    <li><a href=""><em>nav</em><em>nav-tabs</em></a></li>
+    <li><a href="">item2</a></li>
+    <li><a href="">item3</a></li>
+    <li><a href="">item4</a></li>
+  </ul>
+  <div class="devider"></div>
+
+  <ul class="nav nav-pills">
+    <li><a href=""><em>nav</em><em>nav-pills</em></a></li>
+    <li><a href="">item2</a></li>
+    <li><a href="">item3</a></li>
+    <li><a href="">item4</a></li>
+  </ul>
+  <div class="devider"></div>
+
+  <ul class="nav nav-stacked">
+    <li><a href=""><em>nav</em><em>nav-pills</em></a></li>
+    <li><a href="">item2</a></li>
+    <li><a href="">item3</a></li>
+    <li><a href="">item4</a></li>
+  </ul>
+  <div class="devider"></div>
+
+  <ul class="nav nav-tabs nav-justified">
+    <li class="active"><a href=""><em>active</em></a></li>
+    <li><a href="">item2</a></li>
+    <li><a href="">item3</a></li>
+    <li><a href="">item4</a></li>
+  </ul>
+  <div class="devider"></div>
+
+  <ul class="nav nav-tabs nav-justified">
+    <li><a href=""><em>nav-justified</em></a></li>
+    <li><a href="">item2</a></li>
+    <li><a href="">item3</a></li>
+    <li><a href="">item4</a></li>
+  </ul>
+</div>
+
+<h1>导航栏</h1>
+<div class="container">
+  <div class="navbar navbar-default">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">navbar-brand</a>
+    </div>
+    <ul class="nav navbar-nav navbar-left">
+      <li class="active"><a href=""><em>nav</em><em>navbar-nav</em><em>navbar-right</em></a></li>
+      <li><a href="">item2</a></li>
+      <li><a href="">item3</a></li>
+      <li><a href="">item4</a></li>
+    </ul>
+    <form action="" class="navbar-form navbar-right form-inline">
+      <div class="form-group">
+        <input type="text" id="myinput5" class="form-control">
+        <button class="btn btn-default">搜一下</button>
+      </div>
+    </form>
+  </div>
+</div>
+</body>
+</html>

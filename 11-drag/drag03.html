@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>元素碰撞运动</title>
+  <style>
+      body{background: url("img/drag03.jpg") no-repeat;background-position:right top;}
+    .move-box{position:absolute;width: 210px;height: 210px; background:url("img/ball.jpg") no-repeat;text-align: center}
+  </style>
+  <script>
+//    元素匀速运动，当元素碰撞到上下边框时，改变元素纵向运动方向，当元素碰撞到左右边框时，改变元素横行运动方向；
+//    1，使用setInterval，固定横行和纵向速度，改变元素left和top值；
+//    2，当元素left小于最小边界值，或元素left大于最大边界值时，横向速度值取反（相当与改变横行运动方向）；
+//    3，当元素top小于最小边界值，或元素top大于最大边界值时，纵向速度值取反（相当与改变纵行运动方向）；
+    
+    window.onload = function () {
+        //固定横行和纵向速度
+        var speedX = 10;
+        var speedY = 10;
+        var moveBox = document.getElementsByClassName('move-box')[0];
+
+        var time = setInterval(function () {
+            var L = moveBox.offsetLeft + speedX;
+            var T = moveBox.offsetTop + speedY;
+
+            //当元素left小于最小边界值，或元素left大于最大边界值时，横向速度值取反
+            if(L<0 ) {
+                speedX *= -1;
+            }else if(L>document.documentElement.clientWidth-moveBox.offsetWidth){
+                speedX *= -1;
+                L = document.documentElement.clientWidth-moveBox.offsetWidth;   //当元素大于边界，取边界值
+            }
+            //当元素top小于最小边界值，或元素top大于最大边界值时，纵向速度值取反
+            if(T<0) {
+                speedY *= -1;
+            }else if(T>document.documentElement.clientHeight-moveBox.offsetHeight){
+               speedY *= -1;
+               T = document.documentElement.clientHeight-moveBox.offsetHeight;  //当元素大于边界，取边界值
+            }
+
+            moveBox.style.left = L + 'px';
+            moveBox.style.top = T + 'px';
+
+        },30);
+    }
+    
+  </script>
+</head>
+<body>
+<div class="move-box"></div>
+</body>
+</html>

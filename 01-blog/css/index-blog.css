@@ -1,0 +1,174 @@
+/*CSS Reset*/
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, p, blockquote, table, th, td, embed, object {
+  padding: 0;
+  margin: 0;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+fieldset, img, abbr {
+  border: 0;
+}
+address, caption, cite, code, dfn, em,
+h1, h2, h3, h4, h5, h6, strong, th, var {
+  font-weight: normal;
+  font-style: normal;
+}
+ul {
+  list-style: none;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-size: 100%;
+}
+a, ins {
+  text-decoration: none;
+  color: #454545;
+}
+a:hover{
+  text-decoration: none;
+}
+body{
+  color: #454545;
+  background: #454545;
+  line-height: 1.7;
+  font-family: sans-serif;
+}
+.xs-visible{
+  display: none;
+}
+/*side-bar*/
+.side-bar{
+  width:20%;
+  float: left;
+  position: fixed;
+  box-shadow:0 0 3px #454545;
+}
+.side-bar>div{
+  padding:10px 15px;
+  overflow: hidden;
+}
+.side-bar .logo{
+  display: inline-block;
+  padding: 10px 20px;
+  line-height:1;
+  font-size: 30px;
+  font-weight:bold;
+  color: #eeeeee;
+  border:5px solid #eeeeee;
+  white-space: nowrap;
+}
+.side-bar .intro{
+  margin-top: 10px;
+  color: #eeeeee;
+}
+.side-bar .list a{
+  display: block;
+  padding: 5px;
+  color: #888888;
+}
+.side-bar .list a:hover{
+  color: #eeeeee;
+}
+.side-bar .nav a{
+  font-weight:bold;
+}
+
+.main{
+  width:80%;
+  float: right;
+}
+.main .article-list{
+  width: 70%;
+  padding: 10px 20px;
+  background: #ffffff;
+}
+.main .article-item{
+  margin: 25px 0;
+}
+.main .article-item:first-child{
+  margin:10px 0;
+}
+.main .article-item .title{
+  display: block;
+  padding-bottom: 10px;
+  font-size: 22px;
+  font-weight:bold;
+}
+.main .article-item .status{
+  padding-bottom: 10px;
+  font-size: 13px;
+  color: #cccccc;
+}
+.main .article-item .content{
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp:3;
+}
+
+/*响应式*/
+@media screen and (max-width: 410px){
+  body{
+    line-height: 1.5;
+    font-size: 14px;
+  }
+  .side-bar{
+    position: relative;
+    top:0;
+    left:0;
+    width:100%;
+    height: 60px;
+  }
+  .side-bar .header{
+    width:35%;
+    display: block;
+    float: left;
+    padding:5px 15px;
+  }
+  .side-bar .logo{
+    font-size: 1.2rem;
+    padding: 10px 10%;
+  }
+  .side-bar .nav{
+    position: absolute;
+    top: 60px;
+    right:0;
+    background: #454545;
+  }
+  .side-bar .nav li{
+    border-bottom: 1px solid #555555;
+  }
+  .side-bar .menu{
+    float: right;
+  }
+  .side-bar .menu label{
+    color: #888888;
+    line-height: 40px;
+    font-weight:bold;
+  }
+  #toggle-menu{
+    display: none;
+  }
+  #toggle-menu~.nav{
+    display: none;
+  }
+ #toggle-menu:checked~.nav{
+    display: block;
+  }
+  .xs-visible{
+    display: block;
+  }
+  .side-bar .tag-list,
+  .side-bar .intro{
+    display: none;
+  }
+  .main{
+    width:100%;
+    box-sizing: border-box;
+  }
+  .main .article-list{
+    width:100%;
+    box-sizing: border-box;
+  }
+}

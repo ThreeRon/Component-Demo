@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>元素抛出运动并碰撞运动</title>
+  <style>
+    body{background: url("img/drag01.jpg") no-repeat;background-position:right top;}
+    .drag-box{position:absolute;width: 210px;height: 210px; background:url("img/ball.jpg") no-repeat;text-align: center}
+  </style>
+  <script>
+
+      //      1）元素拖动，获取最后拖动释放最后2个点之间点距离，作为元素横行速度和纵向速度，并让元素按这个横向速度运动，和纵向加速运动；
+      //      2）当元素触碰到左右边界时，元素横向速度取反，作横向消耗运动；
+      //      3）当元素触碰到上边界时，元素纵向速度方向取反，作纵向消耗运动；
+      //      4）当元素触碰到下边界时，元素纵向释放方向取反，作横向和纵向消耗运动
+
+      window.onload = function () {
+          var dragBox = document.getElementsByClassName('drag-box')[0];
+
+          var disX = 0, disY = 0;
+          var prevX = 0, prevY = 0;
+          var speedX = 0, speedY = 0;
+          var timer = 0;
+
+          //鼠标按下drag-box
+          dragBox.onmousedown = function (ev) {
+              var ev = ev || window.event;
+
+              disX = ev.clientX - dragBox.offsetLeft;
+              disY = ev.clientY - dragBox.offsetTop;
+              prevX = ev.clientX;
+              prevY = ev.clientY;
+
+              //IE：全局捕获
+              if(dragBox.setCapture){
+                  dragBox.setCapture();
+              }
+
+              //鼠标按下并拖动drag-box
+              document.onmousemove = function (ev) {
+                  var ev = ev || window.event;
+
+                  dragBox.style.left = ev.clientX - disX + 'px';
+                  dragBox.style.top = ev.clientY - disY + 'px';
+
+                  speedX = ev.clientX - prevX;
+                  speedY = ev.clientY - prevY;
+
+                  prevX = ev.clientX;
+                  prevY = ev.clientY;
+
+              };
+              //鼠标松开，清除mouseMove和mouseUp事件
+              document.onmouseup = function (ev) {
+                  document.onmousemove = null;
+                  document.onmouseup = null;
+                  //IE：释放全局捕获
+                  if(dragBox.releaseCapture){
+                      dragBox.releaseCapture();
+                  }
+                  boxMove();
+              };
+              //阻止img元素的默认行为
+              return false;
+          };
+
+          function boxMove() {
+              clearInterval( timer);
+              timer = setInterval(function () {
+                  speedY += 3;
+
+                  var L = dragBox.offsetLeft + speedX;
+                  var T = dragBox.offsetTop + speedY;
+
+                  if(L < 0){
+                      L = 0;
+                      speedX *= -0.75;
+                  }else if(L > document.documentElement.clientWidth-dragBox.offsetWidth){
+                      L = document.documentElement.clientWidth-dragBox.offsetWidth;
+                      speedX *= -0.75;
+                  }
+                  if(T < 0){
+                      T = 0;
+                      speedY *= -0.75;
+                  }else if(T > document.documentElement.clientHeight-dragBox.offsetHeight){
+                      T = document.documentElement.clientHeight-dragBox.offsetHeight;
+                      speedY *= -0.75;
+                      speedX *= 0.75;
+                  }
+
+                  dragBox.style.left = L + 'px';
+                  dragBox.style.top = T + 'px';
+
+              }, 30);
+          }
+      }
+  </script>
+</head>
+<body>
+<div class="drag-box"></div>
+</body>
+</html>

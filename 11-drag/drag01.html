@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>拖动元素-改变位置</title>
+  <style>
+    body{background: url("img/drag01.jpg") no-repeat;background-position:right top;}
+    .drag-box{position:absolute;width: 210px;height: 210px; background:url("img/ball.jpg") no-repeat;text-align: center}
+  </style>
+  <script>
+
+//    元素拖动涉及事件：mousedown，mousemove，mouseup
+//    思路：鼠标按下点坐标M1和移动后鼠标点坐标M2的距离与元素开始时的left和移动后的left之间的距离是相同的：
+//    1）鼠标按下时，计算鼠标坐标与元素left／top之间的距离disX／disY；
+//    2）鼠标移动时，使用鼠标坐标减去disX和disY，就时元素的left和top值；
+//    注意：
+//    1）元素拖动速度过快时，鼠标脱离元素内，会导致拖动中断或不连续：将move和up事件作用于document对象；
+//    2）img元素拖动时会有默认行为，会导致效果无法达到预期：在down事件的最后使用return false阻止掉默认行为；
+//    3）元素中间存在文本时，在ie浏览器上选中文本时会导致拖拽有问题：在down事件中使用setCapture全局捕获(生成一个透明的层)，
+//    在up事件中使用releaseCapture释放全局捕获（setCapture该法是IE浏览器专有）；
+
+      window.onload = function () {
+          var dragBox = document.getElementsByClassName('drag-box')[0];
+          var disX = 0;
+          var disY = 0;
+
+          //鼠标按下drag-box
+          dragBox.onmousedown = function (ev) {
+              var ev = ev || window.event;
+              disX = ev.clientX - dragBox.offsetLeft;
+              disY = ev.clientY - dragBox.offsetTop;
+
+              //IE：全局捕获
+              if(dragBox.setCapture){
+                  dragBox.setCapture();
+              }
+
+              //鼠标按下并拖动drag-box
+              document.onmousemove = function (ev) {
+                  var L = ev.clientX - disX;
+                  var T = ev.clientY - disY;
+
+                  dragBox.style.left = L + 'px';
+                  dragBox.style.top = T + 'px';
+              };
+              //鼠标松开，清除mouseMove和mouseUp事件
+              document.onmouseup = function (ev) {
+                  document.onmousemove = null;
+                  document.onmouseup = null;
+                  //IE：释放全局捕获
+                  if(dragBox.releaseCapture){
+                      dragBox.releaseCapture();
+                  }
+              };
+              //阻止img元素的默认行为
+              return false;
+          };
+      }
+
+  </script>
+</head>
+<body>
+<div class="drag-box">我是足球标题</div>
+<img src="img/ball.jpg" class="drag-box"  style="display: none">
+</body>
+</html>

@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    *{margin:0;padding:0;}
+    ul,li{list-style: none;}
+    #game-table{width:600px; height: 380px; margin: 10px auto; background: #000;position:relative;overflow: hidden;}
+    #game-start{position: absolute;width:100px;height:40px;left:250px;top:140px;color:#fff;box-sizing: border-box;border:2px solid #ffffff;line-height: 40px;text-align: center;border-radius: 5px; cursor:pointer; }
+    #score{color:#fff;font-size: 12px;}
+    #bee{position:relative;}
+    .enemy1{width:25px;height: 20px;background:url(img/mf1.png) no-repeat; float:left;background-size: 80%;}
+    .enemy2{width:25px;height: 20px;background:url(img/mf2.png) no-repeat; float:left;background-size: 80%;}
+    .enemy3{width:25px;height: 20px;background:url(img/mf3.png) no-repeat; float:left;background-size: 80%;}
+    .air{width:26px;height:28px;position: absolute;background:url(img/fj.png) no-repeat;background-size:80%;}
+    .bullet{width:1px;height: 5px;position: absolute;background:#fff;}
+  </style>
+  <script>
+    window.onload= function () {
+        var starBtn = document.getElementById("game-start");
+        starBtn.onclick = function () {
+            this.style.display = 'none';
+            Game.init('game-table');
+        };
+    };
+    var Game = {
+        //变量
+        oParent : '',
+        oUl : '',
+        oA : '',
+        oLis : '',
+        oSNum : '',
+        timer : 0,
+        level : 0,
+        //数据
+        oEnemy : {  //蜜蜂数据
+            e1 : {style:'enemy1', blood:1, speed:5, score:1},
+            e2 : {style:'enemy2', blood:2, speed:7, score:2},
+            e3 : {style:'enemy3', blood:3, speed:10, score:3}
+        },
+        gk : [    //关卡数据
+            {
+                emap : ['e2','e2','e2','e2','e2','e1','e1','e1','e1','e1','e1'],
+                colNum : 10,
+                iSpeedX : 10,
+                iSpeedY : 10,
+                times : 2000
+            },
+            {
+                emap : ['e3','e3','e3','e2','e2','e2','e2','e2','e1','e1','e1','e1','e1','e1','e1'],
+                colNum : 10,
+                iSpeedX : 10,
+                iSpeedY : 10,
+                times : 2000
+            }
+        ],
+        //方法
+        init : function (id) {  //初始化
+          this.oParent = document.getElementById(id);
+          this.createScore();
+          this.createEnemy(this.level);
+          this.createAir();
+        },
+        createScore : function () {  //创建积分
+          var oS = document.createElement('div');
+          oS.id = 'score';
+          oS.innerHTML = "积分:<span>0</span>";
+          this.oParent.appendChild(oS);
+          this.oSNum = oS.getElementsByTagName('span')[0];
+        },
+        createEnemy : function (level) {
+            //每创建一次蜜蜂群先将之前创建的删除
+            if(this.oUl){
+                clearInterval(this.oUl.timer);
+                this.oParent.removeChild(this.oUl);
+            }
+            document.title = '第'+(level+1)+'关';
+
+            var gk = this.gk[level];
+            //创建蜜蜂群容器
+            var oUl = this.oUl = document.createElement('ul');
+            oUl.id = 'bee';
+            oUl.style.width = gk.colNum*25 + 'px';
+            this.oParent.appendChild(oUl);
+            oUl.style.left = (this.oParent.offsetWidth - oUl.offsetWidth)/2 + 'px';
+            //创建小蜜蜂
+            for(var i=0; i<gk.emap.length; i++){
+                var oli = document.createElement('li');
+                oli.className = this.oEnemy[gk.emap[i]].style;
+                oli.blood = this.oEnemy[gk.emap[i]].blood;
+                oli.score = this.oEnemy[gk.emap[i]].score;
+                oli.speed = this.oEnemy[gk.emap[i]].speed;
+                oUl.appendChild(oli);
+            }
+            //定位小蜜蜂
+            this.oLis = oUl.getElementsByTagName('li');
+            var posArr = [];
+            for(var i=0; i<this.oLis.length; i++){  //1，将小蜜蜂位置进行存储
+                var oli = this.oLis[i];
+                posArr.push({left: oli.offsetLeft, top: oli.offsetTop});
+            }
+            for(var i=0; i<this.oLis.length; i++){  //2，将小蜜蜂到位置转换成绝对定位
+                var oli = this.oLis[i];
+                oli.style.position = 'absolute';
+                oli.style.left = posArr[i].left + 'px';
+                oli.style.top = posArr[i].top + 'px';
+            }
+            //蜜蜂群移动
+            this.runEnemy(gk);
+        },
+        runEnemy : function (gk) {  //蜜蜂群移动
+            var L = 0;
+            var R = this.oParent.offsetWidth - this.oUl.offsetWidth;
+
+            this.oUl.timer = setInterval(function () {
+                if(this.oUl.offsetLeft > R || this.oUl.offsetLeft < L){
+                    gk.iSpeedX *= -1;
+                    this.oUl.style.top = this.oUl.offsetTop + gk.iSpeedY + 'px';
+                }
+                this.oUl.style.left = this.oUl.offsetLeft + gk.iSpeedX + 'px';
+            }.bind(this), 200);
+            //每间隔出现一只小蜜蜂离群作战
+            setInterval(function () {
+                this.oneMove();
+            }.bind(this), gk.times);
+        },
+        oneMove : function () {   //单只小蜜蜂向飞机移动
+            var nowLi = this.oLis[Math.floor(Math.random()*this.oLis.length)];
+            if(nowLi){
+                nowLi.timer = setInterval(function () {
+                    //获取小蜜蜂与飞机水平方向距离和垂直方向距离，计算出水平方向和垂直方向当移动速度比
+                    var hDist = (this.oA.offsetLeft + this.oA.offsetWidth/2) - (nowLi.offsetLeft + nowLi.parentNode.offsetLeft + nowLi.offsetWidth/2);
+                    var vDist = (this.oA.offsetTop + this.oA.offsetHeight/2) - (nowLi.offsetTop + nowLi.parentNode.offsetTop + nowLi.offsetHeight/2);
+                    var hypotenuse = Math.sqrt(hDist * hDist + vDist * vDist);
+
+                    var speedX = nowLi.speed * hDist/hypotenuse;
+                    var speedY = nowLi.speed * vDist/hypotenuse;
+
+                    nowLi.style.left = nowLi.offsetLeft + speedX + 'px';
+                    nowLi.style.top = nowLi.offsetTop + speedY + 'px';
+
+                    //碰撞检测
+                    if(this.pzCheck(this.oA, nowLi)){
+                        clearInterval(nowLi.timer);
+                        nowLi.timer = null;
+                        window.location.reload();
+                    }
+                }.bind(this), 30);
+            }
+        },
+        createAir : function () {  //创建飞机
+            var oA = this.oA = document.createElement('div');
+            oA.className = 'air';
+            this.oParent.appendChild(oA);
+            oA.style.left = (this.oParent.offsetWidth - oA.offsetWidth)/2 + 'px';
+            oA.style.top = this.oParent.offsetHeight - oA.offsetHeight + 'px';
+            //操作飞机
+            this.bindAir();
+        },
+        bindAir : function () {  //操作飞机移动
+            var timer;
+            var direction;
+
+            document.onkeydown = function (ev) {
+                var ev = ev || window.event;
+                if(!timer){
+                    timer = setInterval(run.bind(this), 30);
+                }
+                console.info(ev.keyCode);
+                if(ev.keyCode == 37){ //左：向左移动
+                    direction = 1;
+                }else if(ev.keyCode == 39){ //右键：向右移动
+                    direction = 2;
+                }
+            }.bind(this);
+            document.onkeyup = function (ev) {
+                var ev = ev || window.event;
+                //按键弹起则取消点击任务
+                clearInterval(timer);
+                timer = null;
+                direction = 0;
+                if(ev.keyCode == 32){   //空格键：发送子弹
+                  this.createBulet();
+                }
+            }.bind(this);
+
+            function run() {
+              if(direction == 1){
+                  this.oA.style.left = (this.oA.offsetLeft - 10) + 'px';
+              }else if(direction == 2){
+                  this.oA.style.left = (this.oA.offsetLeft + 10) + 'px';
+              }
+            }
+        },
+        createBulet : function () {  //创建子弹
+            var oB = document.createElement('div');
+            oB.className = 'bullet';
+            this.oParent.appendChild(oB);
+            oB.style.left = this.oA.offsetLeft + this.oA.offsetWidth/2 - 4 + 'px';
+            oB.style.top = this.oA.offsetTop - oB.offsetHeight  + 'px';
+            //子弹移动
+            this.runBulet(oB);
+        },
+        runBulet : function (oB) {   //子弹移动
+            oB.timer = setInterval(function () {
+                //移动子弹，当子弹移动到游戏界面外时，将子弹移除
+                var T = oB.offsetTop - 10;
+                if(T < -oB.offsetHeight){
+                    clearInterval(oB.timer);
+                    this.oParent.removeChild(oB);
+                }else {
+                    oB.style.top = T + 'px';
+                }
+                //碰撞检测
+                for(var i=0; i<this.oLis.length; i++){
+                    var oLi = this.oLis[i];
+                    if(this.pzCheck(oB, oLi)){
+                        var blood = oLi.blood;
+                        oLi.blood = --blood;
+                        if(blood == 0){
+                            this.oUl.removeChild(oLi);
+                            this.oSNum.innerHTML = parseInt(this.oSNum.innerHTML) + oLi.score;
+                        }
+                        clearInterval(oB.timer);
+                        this.oParent.removeChild(oB);
+                    }
+                }
+                if(this.oLis.length == 0){
+                    this.createEnemy(++this.level);
+                }
+            }.bind(this), 30);
+        },
+        pzCheck : function (obj1, obj2) {   //碰撞检测
+            var L1 = obj1.offsetLeft;
+            var R1 = obj1.offsetLeft + obj1.offsetWidth;
+            var T1 = obj1.offsetTop;
+            var B1 = obj1.offsetTop + obj1.offsetHeight;
+
+            var L2 = obj2.offsetLeft + obj2.parentNode.offsetLeft;
+            var R2 = obj2.offsetLeft + obj2.offsetWidth + obj2.parentNode.offsetLeft;
+            var T2 = obj2.offsetTop + obj2.parentNode.offsetTop;
+            var B2 = obj2.offsetTop + obj2.offsetHeight + obj2.parentNode.offsetTop;
+
+            if(L1>R2 || R1<L2 || T1>B2 || B1<T2){ //居右 || 居左 || 居下 || 居上
+                return false; //没碰撞
+            }else {
+                return true;
+            }
+        }
+    };
+  </script>
+</head>
+<body>
+
+<div id="game-table">
+  <div id="game-start">开始游戏</div>
+</div>
+
+<!--采用单体写法，将游戏所有操作都封装在game单体对象中-->
+
+<!--大纲-->
+<!--
+1，游戏界面，游戏按钮——☑️
+2，创建成绩——☑️
+3，创建蜜蜂群——☑️
+    蜜蜂群移动——☑️
+    创建单战小蜜蜂——☑️
+4，创建飞机——☑️
+    飞机移动——☑️
+5，创建子弹——☑️
+    子弹移动——☑️
+6，碰撞检测——☑️
+-->
+
+<!--数据-->
+<!--
+1，小蜜蜂:样式，血量，移动速度，成绩，蜜蜂类型
+2，关卡：小蜜蜂，水平移动速度，垂直移动速度，每行蜜蜂数据，单战小蜜蜂产生时间间隔
+
+-->
+
+
+
+</body>
+</html>

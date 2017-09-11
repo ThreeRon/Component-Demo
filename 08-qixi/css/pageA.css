@@ -1,0 +1,25 @@
+
+/*页面A背景*/
+
+.a-bg{
+  width: 100%;
+  height: 100%;
+}
+.a-bg-top{
+  width: 100%;
+  height:71.6%;
+  background: url("../img/a_background_top.png");
+  background-size: 100% 100%;
+}
+.a-bg-middle{
+  width: 100%;
+  height:13.1%;
+  background: url("../img/a_background_middle.png");
+  background-size: 100% 100%;
+}
+.a-bg-bottom{
+  width: 100%;
+  height:15.3%;
+  background: url("../img/a_background_botton.png");
+  background-size: 100% 100%;
+}

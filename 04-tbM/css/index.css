@@ -1,0 +1,211 @@
+/*头部-搜索栏*/
+.header{
+  width:100%;
+  height: 37px;
+  position: fixed;
+  top:0;
+  left:0;
+  background: #FE5400;
+}
+.header .logo{
+  width: 37px;
+  height: 37px;
+  display: block;
+  position: absolute;
+  top:0;
+  left:0;
+  background: url("../images/icon_logo.png") no-repeat;
+  background-size: 27px 20px;
+  background-position: center center;
+}
+.header form{
+  width:100%;
+  padding-left: 37px;
+  padding-right: 10px;
+  position: relative;
+}
+.header .search{
+  width:100%;
+  height: 25px;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-radius: 4px;
+  background: #B52600;
+  text-align: center;
+  font-size: 13px;
+  color: #eeeeee;
+}
+
+/*中间-内容区*/
+.container{
+  width: 100%;
+  max-width: 640px;
+  min-width: 300px;
+  margin: 37px auto 0 auto;
+}
+/*滚动图片*/
+.container .banner{
+  width:100%;
+  overflow: hidden;
+  position: relative;
+}
+.container .banner ul:first-child{
+  width:1000%;
+  transform: translateX(-10%);
+}
+.container .banner ul:first-child li{
+  width:10%;
+  float: left;
+}
+.container .banner ul:first-child li a{
+  width:100%;
+  display: block;
+}
+.container .banner ul:last-child{
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+}
+.container .banner ul:last-child li{
+  width: 8px;
+  height: 8px;
+  float: left;
+  margin: 5px;
+  border-radius: 4px;
+  border:1px solid #ffffff;
+}
+.container .banner ul:last-child li.active{
+  background: #ffffff;
+}
+/*导航栏*/
+.container .nav{
+  width: 100%;
+}
+.container .nav ul{
+  width: 100%;
+  text-align: center;
+}
+.container .nav ul li{
+  width:20%;
+  float: left;
+  padding:10px 0;
+  background: #fff;
+}
+.container .nav ul li a{
+  display: block;
+}
+.container .nav ul li a img{
+  padding: 8%;
+}
+.container .nav ul li a p{
+  padding:4px 0;
+}
+/*头条*/
+.container .news{
+  width:100%;
+  height: 40px;
+  padding:10px 10px 10px 0;
+  background: #ffffff;
+  border-top: 1px solid rgb(232, 232, 232);
+  overflow: hidden;
+}
+.container .news .news_logo{
+  width:22%;
+  float: left;
+  padding: 0 5px;
+  margin: 1px 0;
+  display: inline-block;
+  border-right:1px solid rgb(232, 232, 232);
+}
+.container .news .news_title{
+  width:78%;
+  float: left;
+  display: inline-block;
+  font-size: 15px;
+  white-space: nowrap;
+  padding:1px 10px 1px 0;
+  overflow: hidden;
+}
+.container .news .news_title span{
+  margin-left: 10px;
+  margin-right: 5px;
+  padding: 0 2px;
+  border:1px solid rgb(216, 20, 33);
+  border-radius: 3px;
+  color: rgb(216, 20, 33);
+}
+/*抢购*/
+.container .type_box{
+  width:100%;
+  margin-top: 5px;
+  background: #ffffff;
+  
+  min-height: 200px;
+}
+/*超实惠*/
+.container .type_box.type_disc .type_box_title::before{
+  content: "\25";
+}
+/*天猫必逛*/
+.container .type_box.type_needed .type_box_title::before{
+  content: "\26";
+}
+/*特色好货*/
+.container .type_box.type_good .type_box_title::before{
+  content: "\27";
+}
+/*商品类型区-公用*/
+.container .type_box .type_box_title{
+  padding:5px 0;
+  text-align: center;
+  font-weight:normal;
+  font-size: 14px;
+  color: rgb(255, 53, 14);
+  border-bottom: 1px solid rgb(232, 232, 232);
+}
+.container .type_box .type_box_title::before{
+  /*content: "\22";*/
+  font-size: 16px;
+  padding-right: 5px;
+  display: inline;
+}
+/*底部-菜单栏*/
+.footer{
+  width:100%;
+  height: 44px;
+  position: fixed;
+  bottom:0;
+  left:0;
+  padding-top: 4px;
+  border-bottom: 1px solid #F8F8F8;
+  border-top: 1px solid #E7E7E7;
+  background: #ffffff;
+}
+.footer ul{
+  width:100%;
+}
+.footer ul li{
+  width:20%;
+  float: left;
+  text-align: center;
+}
+.footer ul li a{
+  width:100%;
+  display: block;
+  color: #5D656B;
+}
+.footer ul li a.icon_home:before{
+  content: "\22";
+}
+.footer ul li a.icon_bus:before{
+  content: "\23";
+}
+.footer ul li a.icon_car:before{
+  content: "\2e";
+}
+.footer ul li a.icon_my:before{
+  content: "\2a";
+}
+.footer ul li a.icon_more:before{
+  content: "\34";
+}

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>slides(上下滑动)</title>
+  <style>
+    /*css reset*/
+    body,ul,li,ol{margin:0;padding:0;}
+    ul,li{list-style: none;}
+    img{border: none;vertical-align: top;}
+    /*css other*/
+    .container{width:620px;margin:0 auto;}
+    /*css slides*/
+    .slides{position:relative;width:620px;height:194px;overflow: hidden;}
+    /*css slides-box*/
+    .slides-box{width:100%;position:absolute;left:0; top:0;}
+    .slides-box a{display: block;}
+    .slides-box img{width:100%;}
+    /*css slides-menu*/
+    .slides-menu{position: absolute;right: 10px;bottom: 10px;}
+    .slides-menu li{width: 22px;line-height: 22px;text-align: center;float: left;background: orangered;
+      margin: 1px;color: #ffffff; border-radius: 2px;cursor: pointer; box-sizing: border-box;}
+    .slides-menu li.active{ background: #ffffff;color: orangered;border:1px solid orangered;}
+
+  </style>
+</head>
+<body>
+<div class="container">
+<div class="slides">
+  <ul class="slides-box">
+    <li><a href="#"><img src="./img/banner1.jpg" alt=""></a></li>
+    <li><a href="#"><img src="./img/banner2.jpg" alt=""></a></li>
+    <li><a href="#"><img src="./img/banner3.jpg" alt=""></a></li>
+    <li><a href="#"><img src="./img/banner4.jpg" alt=""></a></li>
+    <li><a href="#"><img src="./img/banner5.jpg" alt=""></a></li>
+  </ul>
+  <ol class="slides-menu"></ol>
+</div>
+
+</div>
+<script src="../../widget/jquery-3.2.1.min.js"></script>
+<script>
+
+  function Slides() {
+      var slideBox = $(".slides-box");
+      var slidesItems = $(".slides-box li");
+      var slidesMenu = $(".slides-menu");
+      var slideHeight = $(slidesItems[0]).height();
+      var slideNum = slidesItems.length;
+      var timeOutId = 0;
+      var index = 0;
+
+      this.init = function () {
+          for(var i=0; i<slideNum; i++){
+              $menuItem  = $("<li index='"+i+"'>"+(i+1)+"</li>");
+              $menuItem.on('click',function (e) {
+                  //清除自动滚动
+                  clearTimeout(timeOutId);
+                  //添加和清除当前导航效果
+                  $(this).addClass("active").siblings("li").removeClass("active");
+                  //设置滚动图片框的Top位置
+                  index = $(this).attr('index');
+                  slideBox.animate({'top':-slideHeight * index}, 500);
+              });
+              slidesMenu.append($menuItem);
+          }
+      }
+      this.scroll = function () {
+          clearTimeout(timeOutId);
+          var slidesMenuItems = $(".slides-menu li");
+          if(slidesMenuItems.length > 0 ){
+              $(slidesMenuItems[index]).addClass("active").siblings("li").removeClass("active");
+              slideBox.animate({'top':-slideHeight * index}, 500);
+              if(index < slideNum-1) index++;
+              else index = 0;
+
+              timeOutId = setTimeout(function(){
+                  this.scroll();
+              }.bind(this),2000);
+          }else {
+              this.init();
+              this.scroll();
+          }
+      }
+  }
+
+  var slides = new Slides();
+  slides.scroll();
+
+</script>
+</body>
+</html>

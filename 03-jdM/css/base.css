@@ -1,0 +1,65 @@
+/*CSS Reset*/
+*,
+::before,
+::after{
+  margin:0;
+  padding:0;
+  /*清除移动端默认的点击高亮效果*/
+  -webkit-tap-highlight-color: transparent;
+  /*设置所有的盒子以边框开始计算宽度：百分比*/
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+body{
+  font-size: 14px;
+  /*设置微软雅黑和设备默认字体*/
+  font-family: "Microsoft YaHei",sans-serif;
+  color: #333;
+}
+a{
+  color: #333;
+  text-decoration: none;
+}
+a:hover{
+  text-decoration: none;
+}
+ul,ol{
+  list-style: none;
+}
+input{
+  border:none;
+  outline: none;
+  /*清除移动端默认端表单样式*/
+  -webkit-appearance: none;
+}
+
+/*CSS default*/
+.f_left{
+  float: left;
+}
+.f_right{
+  float: right;
+}
+.clearfix::after,
+.clearfix::before{
+  content: '';
+  height: 0;
+  display: block;
+  visibility: hidden;
+}
+[class^="icon_"]{
+  background: url("../images/sprites.png") no-repeat;
+  background-size: 200px 200px; /*图片压缩一倍，图片位置也缩一倍*/
+}
+.m_l10{
+  margin-left: 10px;
+}
+.m_r10{
+  margin-right: 10px;
+}
+.m_t10{
+  mar-top: 10px;
+}
+.m_b10{
+  margin-bottom: 10px;
+}

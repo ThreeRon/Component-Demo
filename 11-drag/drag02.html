@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>拖动元素-改变大小</title>
+  <style>
+    body{background: url("img/drag02.jpg") no-repeat;background-position:right top;}
+    .drag-box{position: absolute; width: 200px; height: 200px; background: deeppink;}
+    .drag-handler{position: absolute; width: 20px; height: 20px; background: yellow; right: 0; bottom: 0;}
+  </style>
+  <script>
+
+//    元素拖动涉及事件：mousedown，mousemove，mouseup；
+//    思路：鼠标按下后移动的距离等于元素宽／高改变的大小
+//          1）鼠标按下时，记录鼠标坐标和元素的宽／高；
+//          2）鼠标移动时，计算鼠标坐标移动的距离，元素宽／高加上这个改变的距离即等于元素当前的大小；
+
+
+    window.onload = function () {
+        var dragBox = document.getElementsByClassName('drag-box')[0];
+        var dragHandler = document.getElementsByClassName('drag-handler')[0];
+
+        var clientX = 0;
+        var clientY = 0;
+        var disW = 0;
+        var disH = 0;
+
+        //按下元素
+        dragHandler.onmousedown = function(ev){
+            var ev = ev || window.event;
+
+            //1）记录鼠标坐标和元素的宽／高
+            clientX = ev.clientX;
+            clientY = ev.clientY;
+            disW = dragBox.offsetWidth;
+            disH = dragBox.offsetHeight;
+
+            //拖动元素
+            document.onmousemove = function(ev){
+                var ev = ev || window.event;
+
+               //2）计算元素当前宽高=鼠标移动距离+元素原宽高
+               var W = ev.clientX - clientX + disW;
+               var H = ev.clientY - clientY + disH;
+
+               //控制元素最小值
+               if(W < 100) W = 100;
+               if(H < 100) H = 100;
+
+                dragBox.style.width = W + 'px';
+                dragBox.style.height = H + 'px';
+
+            };
+            //释放元素
+            document.onmouseup = function(ev){
+                document.onmousemove = null;
+                document.onmouseup = null;
+            }
+        };
+
+    }
+  </script>
+</head>
+<body>
+  <div class="drag-box">
+    <div class="drag-handler"></div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>元素自由落体</title>
+  <style>
+    body{background: url("img/drag04.jpg") no-repeat;background-position:right top;}
+    .move-box{position:absolute;width: 210px;height: 210px; background:url("img/ball.jpg") no-repeat;text-align: center}
+  </style>
+  <script>
+//    元素向下加速运动，当元素碰撞到下边框时，改变元素纵向运动方向，元素向上作减速运动；
+//    1，使用setInterval，改变元素当纵向运动速度，和top值；
+//    2，当元素大于边界值时，速度取反，元素向上运动，当速度为0时，元素会自动反向向下运动；
+//    3，每当元素达到边界值时，速度会有损耗，所以向上运动，速度都会变小；
+//    4，当定时器连续2次改变速度方向时，元素几本已经停止运动，可以停止定时器；
+    
+    window.onload = function () {
+        var speedY = 0;
+        var moveBox = document.getElementsByClassName('move-box')[0];
+        var index = 0; //停止定时器使用
+
+        var timer = setInterval(function () {
+            speedY += 5;
+            var T = moveBox.offsetTop + speedY;
+            if(T > document.documentElement.clientHeight-moveBox.clientHeight){
+                T = document.documentElement.clientHeight-moveBox.clientHeight;
+                speedY *= -0.75;  //改变速度方向和损耗
+                index++;
+            }else{
+                index = 0;
+            }
+            moveBox.style.top = T + 'px';
+
+            if(index == 2) clearInterval(timer); //定时器连续2次改变速度方向，停止定时器
+        },30);
+    }
+    
+  </script>
+</head>
+<body>
+<div class="move-box"></div>
+</body>
+</html>
