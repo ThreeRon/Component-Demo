@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>文件拖放</title>
+  <style>
+    .file-accept-box{width: 600px; height: 300px;background: #eee;margin: 0 auto;line-height: 300px;text-align: center}
+    ul,li{list-style: none;}
+    .file-list li{width:80px;height:100px;display: block;float: left;margin: 10px;}
+    .file-list img{width: 100%;vertical-align: top}
+  </style>
+  <script>
+    window.onload = function () {
+        var fileAcceptBox = document.getElementsByClassName('file-accept-box')[0];
+        var fileList = document.getElementsByClassName('file-list')[0];
+        fileAcceptBox.ondragenter = function (ev) {
+        }
+        fileAcceptBox.ondragleave = function (ev) {
+        }
+        fileAcceptBox.ondragover = function (ev) {
+            ev.preventDefault();
+        }
+        fileAcceptBox.ondrop = function (ev) {
+            //阻止浏览器打开文件的默认行为
+            ev.preventDefault();
+            //ev.dataTransfer.files存储拖放到此区域到文件列表
+            var files = ev.dataTransfer.files;
+            var len = files.length;
+            for(var i=0; i<len; i++){
+                //控制只允许拖放图片
+                if(files[i].type.indexOf('image') > -1){
+                    //使用FileReader将文件读取到浏览器中显示
+                    var fr = new FileReader();
+                    fr.readAsDataURL(files[i])
+                    fr.onload = function (ev) {
+                        var li = document.createElement('li');
+                        var img = document.createElement('img');
+                        img.src = this.result;
+                        li.appendChild(img);
+                        fileList.appendChild(li);
+                    }
+                }else {
+                    alert('请选择图片格式');
+                }
+
+            }
+        };
+    }
+  </script>
+</head>
+<body>
+<div class="file-accept-box"><ul class="file-list"></ul></div>
+</body>
+</html>

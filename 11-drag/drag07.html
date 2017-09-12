@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>购物车拖放</title>
+  <style>
+    *{margin: 0; padding: 0;}
+    html{font-size: 62.5%;}
+    body{font-size: 1rem;}
+    ul,li{list-style: none;}
+    img{border: none;width: 100%;}
+    a{text-decoration: none;color: #444;}
+    .clearfix:after{content: '';display: block;clear: both;}
+    .goods{width: 1000px; padding: 5px;overflow: hidden;margin: 10px 10px 10px 10px;}
+    .product {width: 220px; height: 372px;box-sizing: border-box;overflow: hidden; margin: 0 20px 20px 0; border: 1px solid #cccccc;float: left;padding: 5px;}
+    .product:hover{border:4px solid red;}
+    .shopping-car{width: 230px; height: 100%; position: fixed; right: 0; top: 15px; padding: 5px;
+      background: #eee;}
+    .goods .price{font-size: 1.8rem;color:red;font-weight: bold;}
+    .goods .title,.goods .owner{font-size: 1.2rem; line-height: 1.8rem;}
+    .goods .owner{color: #777;text-decoration: underline}
+    .buy-product{width:100%;color:#777;background: #fff;margin: 5px 0; padding: 3px;}
+    .buy-product img{width: 60px;}
+    .buy-product .title{display: inline-block;width: 90px;overflow: hidden; text-overflow:ellipsis; line-height: 60px;
+      white-space: nowrap;overflow: hidden;}
+    .buy-product .num{display: inline-block;width: 30px;overflow: hidden;line-height: 60px;
+      white-space: nowrap;overflow: hidden;text-align: center;}
+    .buy-product .price{display: inline-block;width: 30px;overflow: hidden;line-height: 60px;
+      text-align: right;white-space: nowrap;overflow: hidden;}
+    .money-count{width:100%;font-size: 1.4rem;text-align: right;background: #fff;padding:10px 80px 10px 0;}
+    .drop-box{width:100%;font-size: 1.4rem;text-align: right;background: #f0ad4e;padding:10px 80px 10px 0;}
+  </style>
+  <script>
+    window.onload = function () {
+        var product = {
+          init : function () {
+              this.productDrag();
+              this.shoppingCarAccept();
+              this.shoppingCarDropBoxAccept();
+          },
+          countMoney : function (singlePrice, num) {
+              var moneyCount = document.getElementsByClassName('money-count')[0];
+              var money = 0;
+              if(moneyCount.innerHTML != ''){
+                  money = parseInt(parseInt(moneyCount.innerHTML.replace('¥','')));
+              }
+              var allMoney = money + parseInt(singlePrice.replace('¥',''))*num;
+              moneyCount.innerText = '¥' + allMoney ;
+          },
+          productDrag : function () {
+              var productLis = this.productLis = document.getElementsByClassName('product');
+              for(var i=0; i<productLis.length; i++){
+                  var productLi = productLis[i];
+                  productLi.productID = i;
+                  //商品拖放事件
+                  productLi.ondragstart = function (ev) {
+                      var buyProductJson = {};
+                      buyProductJson.productID = this.productID;
+                      buyProductJson.title = this.getElementsByClassName('title')[0].innerHTML;
+                      buyProductJson.price = this.getElementsByClassName('price')[0].innerHTML;
+                      buyProductJson.img = this.getElementsByTagName('img')[0].src;
+                      buyProductJson.num = 1;
+                      ev.dataTransfer.setData('buyInfo', JSON.stringify(buyProductJson));
+                  };
+              }
+          },
+          shoppingCarAccept : function () {
+
+              var shoppingCar = this.shoppingCar = document.getElementsByClassName('shopping-car')[0];
+              var This = this;
+
+              //商品放入购物车事件
+              shoppingCar.ondragover = function (ev) {
+                  ev.preventDefault();
+              };
+              shoppingCar.ondrop = function (ev) {
+                  var buyInfo = ev.dataTransfer.getData('buyInfo');
+                  if(buyInfo != ''){
+                      var buyProductJson = JSON.parse(buyInfo);
+                      var isExits = isExitsProduct(buyProductJson);
+
+                      if(isExits){  //修改元素数量（商品已经添加到购物车）
+                          modifyProductInfo("product"+buyProductJson.productID);
+                      }else {       //创建元素（商品未添加到购物车）
+                          addProductInfo(buyProductJson);
+                      }
+                      This.countMoney(buyProductJson.price,1);
+                  }
+              };
+              /**
+               * 检测商品是否已经添加在购物车
+               * @param buyInfoObject
+               * @returns {boolean}
+               */
+              function isExitsProduct(buyInfoObject) {
+                  var flag = false;
+                  var buyProductLis = document.getElementsByClassName('buy-product');
+                  for(var i=0; i<buyProductLis.length; i++){
+                      if('product'+buyInfoObject.productID == buyProductLis[i].id.toString()){
+                          return true;
+                      }
+                  }
+                  return flag;
+              };
+              /**
+               * 添加商品到购物车
+               * @param buyInfoObject
+               */
+              function addProductInfo(buyInfoObject) {
+                  var li = document.createElement('li');
+                  li.className = 'buy-product';
+                  li.id ='product'+buyInfoObject.productID;
+                  li.draggable = true;
+
+                  var a = document.createElement('a');
+                  a.href= '#';
+                  li.appendChild(a);
+
+                  var img = document.createElement('img');
+                  img.src = buyInfoObject.img;
+                  a.appendChild(img);
+
+                  var titleSpan = document.createElement('span');
+                  titleSpan.className = 'title';
+                  titleSpan.innerHTML = buyInfoObject.title;
+                  li.append(titleSpan);
+
+                  var numSpan = document.createElement('span');
+                  numSpan.className = 'num';
+                  numSpan.innerHTML = 1;
+                  li.appendChild(numSpan);
+
+                  var priceSpan = document.createElement('span');
+                  priceSpan.className = 'price';
+                  priceSpan.innerHTML = buyInfoObject.price;
+                  li.append(priceSpan);
+
+                  var ul = shoppingCar.getElementsByTagName('ul')[0];
+                  ul.append(li);
+                  This.buyProductDrag(li);
+              };
+              /**
+               * 修改购物车商品树立
+               * @param productID 购物车列表中商品项的ID
+               */
+              function modifyProductInfo(productID) {
+                  var product = document.getElementById(productID);
+                  var num = product.getElementsByClassName('num')[0];
+                  num.innerHTML = parseInt(num.innerHTML)+1;
+              };
+          },
+          buyProductDrag : function (li) {
+              li.ondragstart = function (ev) {
+                  var productID = this.id;
+                  ev.dataTransfer.setData('productID', productID.toString());
+              };
+          },
+          shoppingCarDropBoxAccept : function () {
+              var This = this;
+              var dropBox = document.getElementsByClassName('drop-box')[0];
+              dropBox.ondragover = function (ev) {
+                  ev.preventDefault();
+              };
+              dropBox.ondrop = function (ev) {
+                  var productID = ev.dataTransfer.getData('productID');
+                  if(productID != ''){
+                      //从购物车删除拖动到商品项
+                      var shoppingCar = this.shoppingCar = document.getElementsByClassName('shopping-car')[0];
+                      var ul = shoppingCar.getElementsByTagName('ul')[0];
+                      var dropProduct = document.getElementById(productID);
+                      //从总金额中减去删除到商品项金额
+                      var dropPrice = dropProduct.getElementsByClassName('price')[0];
+                      var price = dropPrice.innerHTML;
+                      var dropNum = dropProduct.getElementsByClassName('num')[0];
+                      var num = dropNum.innerHTML;
+                      This.countMoney('-'+price, parseInt(num));
+                      ul.removeChild(dropProduct);
+                  }
+              };
+          }  
+        };
+        product.init();
+    }
+  </script>
+</head>
+<body>
+<div class="goods clearfix">
+  <ul>
+    <li class="product" draggable="true">
+      <a href="#"><img src="img/goods01.png"></a>
+      <p class="price">&yen;200</p>
+      <a class="title" href="#">koradior休闲时尚蕾丝复古碎花连衣裙</a>
+      <a class="owner" href="#">珂莱蒂尔旗舰店</a>
+    </li>
+    <li class="product" draggable="true">
+      <a href="#"><img src="img/goods05.png"></a>
+      <p class="price">&yen;100</p>
+      <a class="title" href="#">koradior休闲时尚蕾丝复古碎花连衣裙</a>
+      <a class="owner" href="#">珂莱蒂尔旗舰店</a>
+    </li>
+    <li class="product" draggable="true">
+      <a href="#"><img src="img/goods02.png"></a>
+      <p class="price">&yen;60</p>
+      <a class="title" href="#">koradior休闲时尚蕾丝复古碎花连衣裙</a>
+      <a class="owner" href="#">珂莱蒂尔旗舰店</a>
+    </li>
+    <li class="product" draggable="true">
+      <a href="#"><img src="img/goods03.png"></a>
+      <p class="price">&yen;40</p>
+      <a class="title" href="#">koradior休闲时尚蕾丝复古碎花连衣裙</a>
+      <a class="owner" href="#">珂莱蒂尔旗舰店</a>
+    </li>
+    <li class="product" draggable="true">
+      <a href="#"><img src="img/goods04.png"></a>
+      <p class="price">&yen;70</p>
+      <a class="title" href="#">koradior休闲时尚蕾丝复古碎花连衣裙</a>
+      <a class="owner" href="#">珂莱蒂尔旗舰店</a>
+    </li>
+    <li class="product" draggable="true">
+      <a href="#"><img src="img/goods05.png"></a>
+      <p class="price">&yen;80</p>
+      <a class="title" href="#">koradior休闲时尚蕾丝复古碎花连衣裙</a>
+      <a class="owner" href="#">珂莱蒂尔旗舰店</a>
+    </li>
+    <li class="product" draggable="true">
+      <a href="#"><img src="img/goods01.png"></a>
+      <p class="price">&yen;200</p>
+      <a class="title" href="#">koradior休闲时尚蕾丝复古碎花连衣裙</a>
+      <a class="owner" href="#">珂莱蒂尔旗舰店</a>
+    </li>
+    <li class="product" draggable="true">
+      <a href="#"><img src="img/goods05.png"></a>
+      <p class="price">&yen;100</p>
+      <a class="title" href="#">koradior休闲时尚蕾丝复古碎花连衣裙</a>
+      <a class="owner" href="#">珂莱蒂尔旗舰店</a>
+    </li>
+  </ul>
+</div>
+<div class="shopping-car">
+  <ul></ul>
+  <div class="money-count">&yen;0</div>
+  <div class="drop-box">drop-box</div>
+</div>
+</body>
+</html>
